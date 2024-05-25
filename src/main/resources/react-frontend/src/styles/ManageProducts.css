@@ -1,0 +1,20 @@
+.manage-products-container {
+  padding: 20px 150px;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.products-table {
+  width: 500px;
+}
+
+.products-table th, .products-table td {
+  text-align: center;
+}
+
+.mr-2 {
+  margin-right: 8px; /* Adjust margin as needed */
+}

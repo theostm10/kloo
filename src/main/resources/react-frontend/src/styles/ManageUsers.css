@@ -1,0 +1,20 @@
+.manage-users-container {
+  padding: 20px 150px;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.users-table {
+  width: 100%;
+}
+
+.users-table th, .users-table td {
+  text-align: left;
+}
+
+.mr-2 {
+  margin-right: 8px; /* Adjust margin as needed */
+}

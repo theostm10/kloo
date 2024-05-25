@@ -1,0 +1,76 @@
+.register-container {
+  background-color: white;
+  max-width: 350px;
+  margin: 50px auto;
+  padding: 30px 30px 20px; /* Adjust padding to give more space at the top and less at the bottom */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Slightly darker shadow for better emphasis */
+  border-radius: 8px;
+  border: 1px solid #ccc; /* Add a subtle border */
+}
+
+.register-title {
+  margin-bottom: 30px; /* Increase margin for better visibility */
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 20px; /* Consistent spacing between input fields */
+}
+
+.input-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 20px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  border-color: #0056b3;
+  outline: none;
+}
+
+.btn-create-account {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px; /* More padding for a better button size */
+  width: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px; /* Add margin above the button for spacing */
+}
+
+.btn-create-account:hover {
+  background-color: #0056b3;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 20px; /* Increased margin for better separation */
+  font-size: 14px;
+}
+
+.login-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}

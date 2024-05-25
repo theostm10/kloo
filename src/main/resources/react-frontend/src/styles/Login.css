@@ -1,0 +1,71 @@
+.login-container {
+    background-color: white;
+    max-width: 350px;
+    margin: 50px auto;
+    padding: 30px 30px 20px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Slightly darker shadow for better emphasis */
+    border-radius: 8px;
+    border: 1px solid #ccc; /* Add a subtle border */
+}
+
+.login-title {
+    margin-bottom: 30px; /* Increase margin for better visibility */
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px; /* Consistent spacing between input fields */
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+
+.btn-login {
+    background-color: #007bff; /* Primary blue color for the button */
+    color: white; /* White color for the text */
+    border: none; /* No border for a smoother look */
+    padding: 12px 20px; /* Optimal padding for button size */
+    width: 60%; /* Button takes full width of its container */
+    border-radius: 6px; /* Moderately rounded corners for a modern feel */
+    cursor: pointer; /* Indicates the button is clickable */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for color and position */
+    margin-top: 10px; /* Margin above the button for spacing */
+}
+
+.btn-login:hover {
+    background-color: #0056b3; /* Darker blue on hover for a noticeable effect */
+    outline: none; /* Remove outline on focus for a clean look */
+    color: white; /* Maintain text color consistency on hover */
+}
+
+
+
+.register-link {
+    text-align: center;
+    margin-top: 20px; /* Increased margin for better separation */
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
