@@ -11,5 +11,4 @@ public class LicentaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LicentaApplication.class, args);
 	}
-
 }

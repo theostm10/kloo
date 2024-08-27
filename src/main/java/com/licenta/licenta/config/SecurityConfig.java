@@ -6,7 +6,6 @@
     import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
     import org.springframework.security.config.annotation.web.builders.HttpSecurity;
     import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-    import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
     import org.springframework.security.core.context.SecurityContextHolder;
     import org.springframework.security.web.SecurityFilterChain;
     import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -17,8 +16,6 @@
 
     import java.util.Arrays;
 
-    import static org.springframework.http.HttpMethod.*;
-    import static org.springframework.http.HttpMethod.DELETE;
     import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
     @Configuration
@@ -27,6 +24,7 @@
     public class SecurityConfig {
 
         private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**",
+                "/api/v1/**",
                 "/v2/api-docs",
                 "/v3/api-docs",
                 "/v3/api-docs/**",
@@ -47,26 +45,25 @@
             this.logoutHandler = logoutHandler;
         }
 
-@Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // Apply CORS configuration
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(req ->
-                    req.requestMatchers(WHITE_LIST_URL).permitAll()
-                            .anyRequest().authenticated()
-            )
-            .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-            .logout(logout -> logout.logoutUrl("/api/v1/auth/logout")
-                    .addLogoutHandler(logoutHandler)
-                    .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-            );
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+            http
+                    .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // Apply CORS configuration
+                    .csrf(csrf -> csrf.disable())
+                    .authorizeHttpRequests(req ->
+                            req.requestMatchers(WHITE_LIST_URL).permitAll()
+                                    .anyRequest().authenticated()
+                    )
+                    .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                    .authenticationProvider(authenticationProvider)
+                    .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                    .logout(logout -> logout.logoutUrl("/api/v1/auth/logout")
+                            .addLogoutHandler(logoutHandler)
+                            .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+                    );
 
-    return http.build();
-}
-
+            return http.build();
+        }
 
         @Bean
         public CorsConfigurationSource corsConfigurationSource() {
@@ -80,5 +77,4 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             source.registerCorsConfiguration("/**", configuration); // Apply CORS configuration to all paths
             return source;
         }
-
     }

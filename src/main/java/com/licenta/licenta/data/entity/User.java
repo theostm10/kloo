@@ -1,5 +1,6 @@
 package com.licenta.licenta.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.licenta.licenta.data.enums.RoleEnum;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,7 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails {

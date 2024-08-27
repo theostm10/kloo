@@ -36,6 +36,10 @@ public class UserService {
         return usersRepo.findByEmail(email);
     }
 
+    public User getUserById(UUID user) {
+        return usersRepo.getUserById(user);
+    }
+
     public List<UserDto> getAllUsers() {
         List<User> users = usersRepo.findAll();
 
