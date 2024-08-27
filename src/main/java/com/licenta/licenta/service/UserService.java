@@ -75,4 +75,26 @@ public class UserService {
         usersRepo.save(user);
         return user;
     }
- }
+
+    public UserDto updateUser(UUID id, UserDto userDto) {
+        User user = usersRepo.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
+
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        user.setRole(rolesRepo.findByCode(RoleEnum.valueOf(userDto.getRole()))
+                .orElseThrow(() -> new RestApiException("Unable to identify role!")));
+
+        usersRepo.save(user);
+
+        return new UserDto(
+                user.getId(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getRole().getCode().name()
+        );
+    }
+}
+
