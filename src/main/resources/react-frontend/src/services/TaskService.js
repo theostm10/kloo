@@ -19,7 +19,7 @@ class TaskService {
 
   static async getTaskById(taskId) {
     try {
-      const response = await axios.get(`${API_URL}/by-project/${taskId}`, {
+      const response = await axios.get(`${API_URL}/${taskId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
@@ -56,6 +56,21 @@ class TaskService {
     } catch (error) {
       console.error(`Error fetching tasks for sprint ID ${sprintId}:`, error);
       throw error;
+    }
+  }
+
+  static async updateTask(taskId, taskDto) {
+    try {
+      const response = await axios.put(`${API_URL}/${taskId}`, taskDto, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`, // Ensure the user is authenticated
+          'Content-Type': 'application/json', // Set content type to JSON
+        },
+      });
+      return response.data; // Return the updated task data from the response
+    } catch (error) {
+      console.error('Error updating task:', error);
+      throw error; // Re-throw the error for handling in the calling code
     }
   }
 }

@@ -6,7 +6,7 @@ import SprintService from '../services/SprintService'; // Make sure you import S
 import '../styles/CreateTask.css';
 
 function CreateTaskPage() {
-  const { id } = useParams(); // Project ID
+  const { id, sprintid } = useParams(); // Project ID
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [type, setType] = useState('');

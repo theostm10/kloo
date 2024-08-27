@@ -19,4 +19,6 @@ public interface UserProjectRepo extends JpaRepository<UserProject, UUID> {
     Optional<UserProjectDto> findUserProjectById(@Param("id") UUID id);
 
     List<UserProject> findByProjectId( UUID projectId);
+
+    boolean existsByUserIdAndProjectId(UUID userId, UUID projectId);
 }

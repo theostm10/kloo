@@ -32,6 +32,11 @@ public class UserProjectService {
         User user = usersRepo.findById(userProjectDto.getUser())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userProjectDto.getUser()));
 
+        boolean exists = userProjectRepo.existsByUserIdAndProjectId(userProjectDto.getUser(), userProjectDto.getProject());
+        if (exists) {
+            throw new IllegalArgumentException("User is already assigned to this project.");
+        }
+
         UserProject userProject = new UserProject();
         userProject.setProject(project);
         userProject.setUser(user);

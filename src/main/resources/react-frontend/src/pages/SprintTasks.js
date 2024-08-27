@@ -5,16 +5,29 @@ import TaskService from '../services/TaskService';
 import '../styles/SprintTasks.css';
 
 function SprintTasks() {
-  const { sprintId } = useParams();
+  const { id, sprintId } = useParams();
   const [tasks, setTasks] = useState([]);
+  const [filteredTasks, setFilteredTasks] = useState([]);
   const [sprint, setSprint] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const history = useHistory();
 
   useEffect(() => {
     fetchSprintTasks();
   }, []);
+
+  useEffect(() => {
+    if (searchQuery) {
+      const filtered = tasks.filter(task =>
+        task.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredTasks(filtered);
+    } else {
+      setFilteredTasks(tasks);
+    }
+  }, [searchQuery, tasks]);
 
   const fetchSprintTasks = async () => {
     try {
@@ -23,6 +36,7 @@ function SprintTasks() {
 
       const tasksData = await TaskService.getTasksBySprintId(sprintId);
       setTasks(tasksData);
+      setFilteredTasks(tasksData);
 
       setLoading(false);
     } catch (err) {
@@ -32,7 +46,7 @@ function SprintTasks() {
   };
 
   const handleCreateTask = () => {
-    history.push(`/sprints/${sprintId}/create-task`);
+    history.push(`/projects/${id}/add-task`);
   };
 
   if (loading) {
@@ -46,9 +60,18 @@ function SprintTasks() {
   return (
     <div className="sprint-tasks-container">
       <h1>{sprint.name} - Tasks</h1>
-      <button onClick={handleCreateTask} className="btn btn-primary create-task-button">
-        Create New Task
-      </button>
+      <div className="controls">
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-bar"
+        />
+        <button onClick={handleCreateTask} className="btn btn-primary create-task-button">
+          Add Task
+        </button>
+      </div>
       <table className="tasks-table">
         <thead>
           <tr>
@@ -61,11 +84,11 @@ function SprintTasks() {
           </tr>
         </thead>
         <tbody>
-          {tasks.map((task, index) => (
+          {filteredTasks.map((task, index) => (
             <tr key={task.id}>
               <td>{index + 1}</td>
               <td>{task.priority}</td>
-              <td><Link to={`/tasks/${task.id}`} className="task-link">{task.title}</Link></td>
+              <td><Link to={`/projects/${id}/tasks/${task.id}`} className="task-link">{task.title}</Link></td>
               <td>{task.type}</td>
               <td>{task.status}</td>
               <td>{task.assigned_to ? `${task.assigned_to.firstName} ${task.assigned_to.lastName}` : 'Unassigned'}</td>

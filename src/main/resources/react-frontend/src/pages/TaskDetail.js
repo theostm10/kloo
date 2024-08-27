@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import TaskService from '../services/TaskService';
 import CommentService from '../services/CommentService';
 import AttachmentService from '../services/AttachmentService';
+import UserProjectService from '../services/UserProjectService'; // Import UserProjectService
+import SprintService from '../services/SprintService'; // Import SprintService
 import '../styles/TaskDetail.css';
 
 function TaskDetail() {
@@ -12,6 +14,8 @@ function TaskDetail() {
   const [attachments, setAttachments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [newAttachment, setNewAttachment] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [sprints, setSprints] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -22,6 +26,11 @@ function TaskDetail() {
     try {
       const taskData = await TaskService.getTaskById(id);
       setTask(taskData);
+
+      const usersResponse = await UserProjectService.getUsersByProjectId(taskData.project);
+      setUsers(usersResponse);
+      const sprintsResponse = await SprintService.getSprintsByProjectId(taskData.project);
+      setSprints(sprintsResponse);
 
       const commentsData = await CommentService.getCommentsByTaskId(id);
       setComments(commentsData);
@@ -63,18 +72,19 @@ function TaskDetail() {
   const handleAttachmentUpload = async (e) => {
     e.preventDefault();
     try {
-      const formData = new FormData();
-      formData.append('file', newAttachment);
-      formData.append('taskId', id);
+        const formData = new FormData();
+        formData.append('file', newAttachment);
+        formData.append('taskId', id);
+        formData.append('userId', localStorage.getItem('user_id'));
 
-      await AttachmentService.uploadAttachment(formData);
-      setNewAttachment(null);
-      fetchTaskDetails();
+        await AttachmentService.createAttachment(formData);
+        setNewAttachment(null);
+        fetchTaskDetails();
     } catch (err) {
-      setError('Failed to upload attachment.');
-      console.error('Error uploading attachment:', err);
+        setError('Failed to upload attachment.');
+        console.error('Error uploading attachment:', err);
     }
-  };
+};
 
   const handleTaskUpdate = async (e) => {
     e.preventDefault();
@@ -121,8 +131,11 @@ function TaskDetail() {
                 onChange={(e) => setTask({ ...task, status: e.target.value })}
                 required
               >
-                <option value="TO_DO">To Do</option>
+                <option value="">Select Status</option>
+                <option value="OPEN">Open</option>
                 <option value="IN_PROGRESS">In Progress</option>
+                <option value="ON_HOLD">On Hold</option>
+                <option value="IN_TEST">To Test</option>
                 <option value="DONE">Done</option>
               </select>
             </div>
@@ -147,9 +160,42 @@ function TaskDetail() {
                 onChange={(e) => setTask({ ...task, type: e.target.value })}
                 required
               >
-                <option value="BUG">Bug</option>
-                <option value="FEATURE">Feature</option>
-                <option value="TASK">Task</option>
+                <option value="">Select Type</option>
+                <option value="TASK_BUG">Bug</option>
+                <option value="TASK_STORY">Task</option>
+                <option value="TASK_INVESTIGATION">Invvestigation</option>
+              </select>
+            </div>
+            <div className="input-group">
+              <label htmlFor="assignedTo">Assigned To</label>
+              <select
+                id="assignedTo"
+                value={task.assigned_to} // Value from task data
+                onChange={(e) => setTask({ ...task, assigned_to: e.target.value })}
+                required
+              >
+                <option value="">Select User</option>
+                {users.map(user => (
+                  <option key={user.user.id} value={user.user.id}>
+                    {user.user.firstName} {user.user.lastName}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="input-group">
+              <label htmlFor="sprint">Sprint</label>
+              <select
+                id="sprint"
+                value={task.sprint} // Value from task data
+                onChange={(e) => setTask({ ...task, sprint: e.target.value })}
+                required
+              >
+                <option value="">Select Sprint</option>
+                {sprints.map(sprint => (
+                  <option key={sprint.id} value={sprint.id}>
+                    {sprint.name}
+                  </option>
+                ))}
               </select>
             </div>
             <button type="submit" className="btn btn-primary">Update Task</button>
@@ -168,10 +214,10 @@ function TaskDetail() {
             <ul>
               {attachments.map(attachment => (
                 <li key={attachment.id}>
-                  <a href={attachment.file_path} target="_blank" rel="noopener noreferrer">
-                    {attachment.file_path}
+                  <a href={`/${attachment.file_path}`} download>
+                    {attachment.file_path.split('/').pop()} {/* Just the file name */}
                   </a>
-                  <p><small>Uploaded by User {attachment.user} on {new Date(attachment.uploaded_date).toLocaleString()}</small></p>
+                  <p><small>Uploaded by {attachment.user.firstName} on {new Date(attachment.uploaded_date).toLocaleString()}</small></p>
                 </li>
               ))}
             </ul>

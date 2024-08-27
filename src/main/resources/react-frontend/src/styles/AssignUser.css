@@ -65,3 +65,9 @@
 .assign-user-form .btn-primary:hover {
   background-color: #2980b9;
 }
+
+.info-message {
+  color: #ff9900;
+  font-size: 0.9em;
+  margin-top: 10px;
+}

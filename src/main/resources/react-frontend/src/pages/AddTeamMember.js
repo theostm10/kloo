@@ -49,7 +49,7 @@ function AddTeamMember() {
 
     try {
       const teamMemberDto = {
-        team:  teamId,
+        team: teamId,
         user: selectedUserId,
       };
 
@@ -88,9 +88,16 @@ function AddTeamMember() {
             ))}
           </select>
         </div>
-        <button type="submit" className="btn btn-primary" disabled={isUserAlreadyInTeam(selectedUserId)}>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={isUserAlreadyInTeam(selectedUserId)}
+        >
           Add Member
         </button>
+        {isUserAlreadyInTeam(selectedUserId) && (
+          <p className="info-message">User is already in the team.</p>
+        )}
       </form>
     </div>
   );

@@ -78,7 +78,7 @@ function ProjectDetail() {
                 {sprints.map((sprint) => (
                   <li key={sprint.id} className="item">
                     <Link to={`/projects/${id}/sprints/${sprint.id}/tasks`} className="item-link">
-                      {sprint.name} ({new Date(sprint.startDate).toLocaleDateString()} - {new Date(sprint.endDate).toLocaleDateString()})
+                      {sprint.name} ({new Date(sprint.start_date).toLocaleDateString()} - {new Date(sprint.end_date).toLocaleDateString()})
                     </Link>
                   </li>
                 ))}

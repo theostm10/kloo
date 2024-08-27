@@ -8,6 +8,7 @@ function AssignUser() {
   const { id } = useParams(); // Project ID
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState('');
+  const [projectUsers, setProjectUsers] = useState([]); // Store users already assigned to the project
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const history = useHistory();
@@ -20,17 +21,34 @@ function AssignUser() {
         setError('Failed to load users.');
         console.error('Error fetching users:', err);
       });
-  }, []);
+
+    // Fetch users already assigned to the project
+    UserProjectService.getUsersByProjectId(id)
+      .then(response => setProjectUsers(response))
+      .catch(err => {
+        setError('Failed to load project users.');
+        console.error('Error fetching project users:', err);
+      });
+  }, [id]);
+
+  const isUserAlreadyInProject = (userId) => {
+    return projectUsers.some(user => user.user.id === userId);
+  };
 
   const handleAssignUser = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
 
+    if (isUserAlreadyInProject(selectedUser)) {
+      setError('This user is already assigned to the project.');
+      return;
+    }
+
     try {
       const userProjectDto = {
-        user: selectedUser ,
-        project: id ,
+        user: selectedUser,
+        project: id,
       };
 
       await UserProjectService.assignUserToProject(userProjectDto);
@@ -42,7 +60,13 @@ function AssignUser() {
       }, 2000);
 
     } catch (error) {
-      setError('Failed to assign user. Please try again.');
+      if (error.response && error.response.status === 409) { // 409 Conflict
+        setError('User is already assigned to this project.');
+      } else if (error.response && error.response.data) {
+        setError(error.response.data.message || 'Failed to assign user. Please try again.');
+      } else {
+        setError('Failed to assign user. Please try again.');
+      }
       console.error('Error assigning user:', error);
     }
   };
@@ -63,11 +87,22 @@ function AssignUser() {
           >
             <option value="">Select a User</option>
             {users.map(user => (
-              <option key={user.id} value={user.id}>{user.firstName} {user.lastName} ({user.email})</option>
+              <option key={user.id} value={user.id}>
+                {user.firstName} {user.lastName} ({user.email})
+              </option>
             ))}
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">Assign User</button>
+        <button 
+          type="submit" 
+          className="btn btn-primary" 
+          disabled={isUserAlreadyInProject(selectedUser)}
+        >
+          Assign User
+        </button>
+        {isUserAlreadyInProject(selectedUser) && (
+          <p className="info-message">User is already assigned to this project.</p>
+        )}
       </form>
     </div>
   );

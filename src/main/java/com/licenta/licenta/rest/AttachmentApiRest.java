@@ -4,8 +4,10 @@ import com.licenta.licenta.data.dto.AttachmentDto;
 import com.licenta.licenta.service.AttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,9 +20,11 @@ public class AttachmentApiRest {
     @Autowired
     private AttachmentService attachmentService;
 
-    @PostMapping
-    public ResponseEntity<AttachmentDto> createAttachment(@RequestBody AttachmentDto attachmentDto) {
-        AttachmentDto createdAttachment = attachmentService.createAttachment(attachmentDto);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AttachmentDto> createAttachment(@RequestParam("file") MultipartFile file,
+                                                          @RequestParam("taskId") UUID taskId,
+                                                          @RequestParam("userId") UUID userId) {
+        AttachmentDto createdAttachment = attachmentService.createAttachment(file, taskId, userId);
         return new ResponseEntity<>(createdAttachment, HttpStatus.CREATED);
     }
 
