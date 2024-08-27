@@ -1,0 +1,25 @@
+.task-summary {
+    width: 48%;
+  }
+  
+  .task-summary h2 {
+    margin-bottom: 15px;
+  }
+  
+  .task-summary-grid {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .task-summary-item {
+    width: 30%;
+    text-align: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+  }
+  
+  .task-summary-item h3 {
+    margin-bottom: 10px;
+  }
+  

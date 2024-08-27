@@ -14,7 +14,7 @@ function Login({ history }) {
     e.preventDefault();
     try {
       await login({ email, password });
-      history.push('/'); // Redirect to the homepage or dashboard
+      history.push('/projects'); // Redirect to projects
     } catch (error) {
       setError('Login failed. Please check your credentials.');
       console.error('Login failed:', error.message);
@@ -48,7 +48,7 @@ function Login({ history }) {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary btn-login">Login</button>
+        <button type="submit" className="btn-primary btn-login">Login</button>
       </form>
       <div className="register-link">
         Don't have an account? <Link to="/register">Register</Link>

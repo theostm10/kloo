@@ -1,67 +1,61 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import Login from './components/LoginPage';
-import Register from './components/RegisterPage';
+import Login from './pages/LoginPage';
+import Register from './pages/RegisterPage';
 import Landing from './pages/LandingPage';
-import ProductDetails from './pages/ProductDetails';
-import CartPage from './pages/CartPage';
-import EditProduct from './pages/EditProduct';
-import ProductsComponent from './components/ProductsComponent';
-import FilterSidebar from './components/FilterSidebar';
+import ProjectList from './pages/ProjectList';
+import ProjectDetail from './pages/ProjectDetail';
+import NewProject from './components/NewProject';
+import TeamList from './pages/TeamList';
+import TeamDetail from './pages/TeamDetail';
+import NewTeamPage from './pages/NewTeam';
+import EditAccount from './pages/EditAccount';
+import CreateSprint from './pages/CreateSprint';
+import AddTeamMember from './pages/AddTeamMember';
+import TaskDetail from './pages/TaskDetail';
+import SprintTasks from './pages/SprintTasks.js'
+import CreateTask from './pages/CreateTask';
+import AssignUser from './pages/AssignUser';
+import ManageUsers from './components/ManageUsers'; // Import the new component
 import ProtectedRoute from './components/ProtectedRoute';
-import ManageProducts from './components/ManageProducts';
-import ManageUsers from './components/ManageUsers';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 import './styles/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [filters, setFilters] = useState({});
-
-  const handleSortChange = (sortOrder) => {
-    setFilters((prev) => ({ ...prev, sortOrder }));
-  };
-
-  const handleFilterChange = (key, value) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  };
-
   return (
     <AuthProvider>
-      <MainApp 
-        handleSortChange={handleSortChange} 
-        handleFilterChange={handleFilterChange} 
-        filters={filters} 
-      />
+        <MainApp />
     </AuthProvider>
   );
 }
 
-function MainApp({ handleSortChange, handleFilterChange, filters }) {
-  const { isAdmin } = useAuth();
-
+function MainApp() {
   return (
     <div className="App">
       <Router>
-        <Navbar isAdmin={isAdmin} />
+        <Navbar />
         <div className="content-area">
           <Switch>
             <Route exact path="/" component={Landing} />
             <Route path="/home" component={Home} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
-            <Route exact  path="/products">
-              <div className="products-page">
-                <FilterSidebar onSortChange={handleSortChange} onFilterChange={handleFilterChange} />
-                <ProductsComponent filters={filters} />
-              </div>
-            </Route>
-            <Route path="/products/:id" component={ProductDetails} />
-             <Route path="/cart" component={CartPage} />
-            <ProtectedRoute path="/admin/products" exact component={ManageProducts} />
-            <ProtectedRoute path="/admin/products/edit/:id" component={EditProduct} />
+            <ProtectedRoute path="/projects/:id/tasks/:id" component={TaskDetail} />
+            <ProtectedRoute path="/projects/:id/sprints/:sprintId/tasks" component={SprintTasks} />
+            <ProtectedRoute path="/projects/:id/add-sprint" component={CreateSprint} />
+            <ProtectedRoute path="/projects/:id/add-task" component={CreateTask} />
+            <ProtectedRoute path="/projects/:id/assign-user" component={AssignUser} />
+            <ProtectedRoute path="/projects/new" component={NewProject} />
+            <ProtectedRoute path="/projects/:id" component={ProjectDetail} />
+            <ProtectedRoute path="/projects" component={ProjectList} />
+            <ProtectedRoute path="/teams/new" component={NewTeamPage} />
+            <ProtectedRoute path="/teams/:teamId/add-member" component={AddTeamMember} />
+            <ProtectedRoute path="/teams/:id" component={TeamDetail} />
+            <ProtectedRoute path="/teams" component={TeamList} />
+            <ProtectedRoute path="/edit-account" component={EditAccount} />
             <ProtectedRoute path="/admin/users" component={ManageUsers} />
           </Switch>
         </div>
@@ -69,5 +63,8 @@ function MainApp({ handleSortChange, handleFilterChange, filters }) {
     </div>
   );
 }
+
+
+
 
 export default App;

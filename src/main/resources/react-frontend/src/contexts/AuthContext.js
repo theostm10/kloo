@@ -35,8 +35,17 @@ export const AuthProvider = ({ children }) => {
     setIsAdmin(false);
   };
 
+  const register = async (registerData) => {
+    const user = await AuthService.register(registerData);
+    const role = AuthService.getUserRole();
+    setIsAuthenticated(true);
+    setUserEmail(AuthService.getUserEmail());
+    setIsAdmin(role === 'ROLE_ADMIN');
+  };
+
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userEmail, isAdmin, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userEmail, isAdmin, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );

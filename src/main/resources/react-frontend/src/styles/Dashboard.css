@@ -1,0 +1,13 @@
+.dashboard {
+    padding: 20px;
+  }
+  
+  .dashboard-header {
+    margin-bottom: 20px;
+  }
+  
+  .dashboard-overview {
+    display: flex;
+    justify-content: space-between;
+  }
+  

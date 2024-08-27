@@ -1,0 +1,51 @@
+.task-board {
+    padding: 20px;
+  }
+  
+  .task-board h2 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .task-columns {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .task-column {
+    width: 30%;
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  .task-column h3 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  .task-item {
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: background-color 0.3s ease;
+  }
+  
+  .task-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .task-item h4 {
+    margin: 0;
+    font-size: 1.1em;
+  }
+  
+  .task-item p {
+    margin: 5px 0 0;
+    font-size: 0.9em;
+    color: #666;
+  }
+  

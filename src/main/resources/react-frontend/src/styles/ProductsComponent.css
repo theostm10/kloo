@@ -7,15 +7,17 @@
 }
 
 .product-card {
-  flex: 0 1 380px; /* Fixăm lățimea cardului */
-  max-width: 380px; /* Asigură că nu depășește această lățime */
-  max-height: 400px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.2s;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-between; /* Ensures that the button aligns to the bottom */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  width: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 450px; /* Fixed height */
 }
 
 .product-card:hover {

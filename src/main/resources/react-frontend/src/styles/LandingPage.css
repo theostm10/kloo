@@ -1,0 +1,78 @@
+/* LandingPage.css */
+.landing-page-wrapper {
+  margin-left: 220px; /* Ensure this matches the width of your sidebar */
+  min-height: 100vh;
+  background-color: #f7f9fc; /* Light blue-ish background color */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /* Optional: add padding to give some space around the content */
+  box-sizing: border-box; /* Ensure padding is included in the width calculation */
+}
+
+.landing-page {
+  text-align: center;
+  padding: 20px;
+  max-width: 800px;
+  width: 100%; /* Ensure the content takes the full width available */
+}
+
+.landing-title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.landing-subtitle {
+  font-size: 1.5rem;
+  color: #34495e;
+  margin-bottom: 40px;
+}
+
+.landing-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center; /* Center buttons horizontally */
+  margin-bottom: 40px;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: white;
+  background-color: #3498db;
+  border: none;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.login-button {
+  background-color: #3498db; /* Blue for login */
+}
+
+.register-button {
+  background-color: #2ecc71; /* Green for sign up */
+}
+
+.cta-button:hover {
+  background-color: #2980b9;
+}
+
+.register-button:hover {
+  background-color: #27ae60;
+}
+
+.landing-info {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  margin-top: 20px;
+}
+
+.landing-info p {
+  margin-bottom: 20px;
+}
