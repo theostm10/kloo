@@ -28,8 +28,20 @@ class UserService {
       throw error;
     }
   }
+
+  static async updateUser(id, user) {
+    try {
+      const response = await axios.put(`http://localhost:8080/api/v1/users/${id}`, user, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw error;
+    }
+  }
 }
-
-
 
 export default UserService;
