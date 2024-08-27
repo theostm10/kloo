@@ -5,20 +5,33 @@ import '../styles/TeamList.css';
 
 function TeamsPage() {
   const [teams, setTeams] = useState([]);
+  const [filteredTeams, setFilteredTeams] = useState([]);
   const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const history = useHistory();
 
   useEffect(() => {
-    // Fetch the teams when the component is mounted
     TeamService.getAllTeams()
       .then(response => {
         setTeams(response);
+        setFilteredTeams(response); // Initializează filteredTeams cu toate echipele
       })
       .catch(err => {
         setError('Failed to load teams.');
         console.error('Error fetching teams:', err);
       });
   }, []);
+
+  useEffect(() => {
+    if (searchQuery) {
+      const filtered = teams.filter(team =>
+        team.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredTeams(filtered);
+    } else {
+      setFilteredTeams(teams);
+    }
+  }, [searchQuery, teams]);
 
   const handleDeleteTeam = async (id) => {
     try {
@@ -38,13 +51,22 @@ function TeamsPage() {
     <div className="teams-page-container">
       <header className="teams-page-header">
         <h1>Your Teams</h1>
-        <button onClick={handleCreateTeam} className="btn btn-primary create-team-button">
-          + Create New Team
-        </button>
+        <div className="controls">
+          <input
+            type="text"
+            placeholder="Search teams..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-bar"
+          />
+          <button onClick={handleCreateTeam} className="btn btn-primary create-team-button">
+            + Create New Team
+          </button>
+        </div>
       </header>
       {error && <p className="error-message">{error}</p>}
       <div className="teams-list">
-        {teams.map(team => (
+        {filteredTeams.map(team => (
           <div key={team.id} className="team-card">
             <h3 className="team-name">{team.name}</h3>
             <div className="team-actions">
