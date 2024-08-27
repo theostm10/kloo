@@ -61,7 +61,7 @@ function ProjectDetail() {
 
           <div className="columns-container">
             <div className="column">
-              <h2 className="section-title">Tasks</h2>
+              <h2 className="section-title">My Tasks</h2>
               <ul className="item-list">
                 {tasks.map((task) => (
                   <li key={task.id} className="item">

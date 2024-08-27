@@ -42,6 +42,20 @@ class UserService {
       throw error;
     }
   }
+
+  static async getUserById(id) {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/v1/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error getting user:', error);
+      throw error;
+    }
+  }
 }
 
 export default UserService;

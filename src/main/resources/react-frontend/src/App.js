@@ -14,6 +14,7 @@ import NewTeamPage from './pages/NewTeam';
 import EditAccount from './pages/EditAccount';
 import CreateSprint from './pages/CreateSprint';
 import AddTeamMember from './pages/AddTeamMember';
+import AllTasksPage  from './pages/AllTasksPage.js';
 import TaskDetail from './pages/TaskDetail';
 import SprintTasks from './pages/SprintTasks.js'
 import CreateTask from './pages/CreateTask';
@@ -44,6 +45,7 @@ function MainApp() {
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <ProtectedRoute path="/projects/:id/tasks/:id" component={TaskDetail} />
+            <ProtectedRoute path="/projects/:id/tasks" component={AllTasksPage} />
             <ProtectedRoute path="/projects/:id/sprints/:sprintId/tasks" component={SprintTasks} />
             <ProtectedRoute path="/projects/:id/add-sprint" component={CreateSprint} />
             <ProtectedRoute path="/projects/:id/add-task" component={CreateTask} />

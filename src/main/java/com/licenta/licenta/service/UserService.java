@@ -2,8 +2,10 @@ package com.licenta.licenta.service;
 
 import com.licenta.licenta.data.dto.RegisterUserDto;
 import com.licenta.licenta.data.dto.UserDto;
+import com.licenta.licenta.data.entity.Team;
 import com.licenta.licenta.data.entity.User;
 import com.licenta.licenta.data.enums.RoleEnum;
+import com.licenta.licenta.exception.ResourceNotFoundException;
 import com.licenta.licenta.exception.RestApiException;
 import com.licenta.licenta.exception.UserNotFoundException;
 import com.licenta.licenta.repo.RolesRepo;
@@ -96,5 +98,6 @@ public class UserService {
                 user.getRole().getCode().name()
         );
     }
+
 }
 

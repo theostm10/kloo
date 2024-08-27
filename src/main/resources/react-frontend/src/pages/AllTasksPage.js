@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useHistory } from 'react-router-dom';
-import SprintService from '../services/SprintService';
 import TaskService from '../services/TaskService';
-import UserService from '../services/UserService'
-import '../styles/SprintTasks.css';
+import SprintService from '../services/SprintService';
+import UserService from '../services/UserService';
+import '../styles/AllTasksPage.css';
 
-function SprintTasks() {
-  const { id, sprintId } = useParams();
+function AllTasksPage() {
+  const { id } = useParams(); // Project ID
   const [tasks, setTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
-  const [sprint, setSprint] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const history = useHistory();
 
   useEffect(() => {
-    fetchSprintTasks();
+    fetchAllTasks();
   }, []);
 
   useEffect(() => {
@@ -30,6 +29,15 @@ function SprintTasks() {
     }
   }, [searchQuery, tasks]);
 
+  const fetchSprintDetails = async (task) => {
+    try {
+      const sprintData = await SprintService.getSprintById(task.sprint);
+      task.sprint = sprintData;
+    } catch (err) {
+      console.error(`Failed to fetch sprint details for sprint ID ${task.sprint}`, err);
+    }
+  };
+
   const fetchUserDetails = async (task) => {
     try {
       const userData = await UserService.getUserById(task.assigned_to);
@@ -40,19 +48,17 @@ function SprintTasks() {
     }
   };
 
-  const fetchSprintTasks = async () => {
+  const fetchAllTasks = async () => {
     try {
-      const sprintData = await SprintService.getSprintById(sprintId);
-      setSprint(sprintData);
+      const tasksData = await TaskService.getTasksByProjectId(id);
 
-      const tasksData = await TaskService.getTasksBySprintId(sprintId);
+      await Promise.all(tasksData.map(task => fetchSprintDetails(task)));
       await Promise.all(tasksData.map(task => fetchUserDetails(task)));
       setTasks(tasksData);
       setFilteredTasks(tasksData);
-
       setLoading(false);
     } catch (err) {
-      setError('Failed to load sprint tasks.');
+      setError('Failed to load tasks.');
       setLoading(false);
     }
   };
@@ -62,7 +68,7 @@ function SprintTasks() {
   };
 
   if (loading) {
-    return <div className="loading">Loading sprint tasks...</div>;
+    return <div className="loading">Loading tasks...</div>;
   }
 
   if (error) {
@@ -70,8 +76,8 @@ function SprintTasks() {
   }
 
   return (
-    <div className="sprint-tasks-container">
-      <h1>{sprint.name} - Tasks</h1>
+    <div className="all-tasks-container">
+      <h1>All Tasks for Project</h1>
       <div className="controls">
         <input
           type="text"
@@ -88,22 +94,22 @@ function SprintTasks() {
         <thead>
           <tr>
             <th>No.</th>
-            <th>Priority</th>
-            <th>Name</th>
-            <th>Type</th>
+            <th>Title</th>
             <th>Status</th>
+            <th>Priority</th>
             <th>Assigned To</th>
+            <th>Sprint</th> {/* New Sprint column */}
           </tr>
         </thead>
         <tbody>
           {filteredTasks.map((task, index) => (
             <tr key={task.id}>
               <td>{index + 1}</td>
-              <td>{task.priority}</td>
               <td><Link to={`/projects/${id}/tasks/${task.id}`} className="task-link">{task.title}</Link></td>
-              <td>{task.type}</td>
               <td>{task.status}</td>
+              <td>{task.priority}</td>
               <td>{task.assigned_to ? `${task.assigned_to.firstName} ${task.assigned_to.lastName}` : 'Unassigned'}</td>
+              <td>{task.sprint ? task.sprint.name : 'No Sprint'}</td> {/* Display sprint name or 'No Sprint' */}
             </tr>
           ))}
         </tbody>
@@ -112,4 +118,4 @@ function SprintTasks() {
   );
 }
 
-export default SprintTasks;
+export default AllTasksPage;

@@ -5,6 +5,7 @@ import CommentService from '../services/CommentService';
 import AttachmentService from '../services/AttachmentService';
 import UserProjectService from '../services/UserProjectService'; // Import UserProjectService
 import SprintService from '../services/SprintService'; // Import SprintService
+import UserService from '../services/UserService';
 import '../styles/TaskDetail.css';
 
 function TaskDetail() {
@@ -22,6 +23,26 @@ function TaskDetail() {
     fetchTaskDetails();
   }, []);
 
+  const fetchUserCommentDetails = async (comment) => {
+    try {
+      const userData = await UserService.getUserById(comment.user);
+      comment.user = userData; // Assuming the response has firstName and lastName fields
+    } catch (err) {
+      console.error(`Failed to fetch user details for user ID ${comment.user}`, err);
+      comment.user = 'Unknown User';
+    }
+  };
+
+  const fetchUserAttachmentDetails = async (attachment) => {
+    try {
+      const userData = await UserService.getUserById(attachment.user);
+      attachment.user = userData; // Assuming the response has firstName and lastName fields
+    } catch (err) {
+      console.error(`Failed to fetch user details for user ID ${attachment.user}`, err);
+      attachment.user = 'Unknown User';
+    }
+  };
+
   const fetchTaskDetails = async () => {
     try {
       const taskData = await TaskService.getTaskById(id);
@@ -33,9 +54,11 @@ function TaskDetail() {
       setSprints(sprintsResponse);
 
       const commentsData = await CommentService.getCommentsByTaskId(id);
+      await Promise.all(commentsData.map(comment => fetchUserCommentDetails(comment)));
       setComments(commentsData);
 
       const attachmentsData = await AttachmentService.getAttachmentsByTaskId(id);
+      await Promise.all(attachmentsData.map(attachment => fetchUserAttachmentDetails(attachment)));
       setAttachments(attachmentsData);
     } catch (err) {
       setError('Failed to load task details.');
@@ -217,7 +240,7 @@ function TaskDetail() {
                   <a href={`/${attachment.file_path}`} download>
                     {attachment.file_path.split('/').pop()} {/* Just the file name */}
                   </a>
-                  <p><small>Uploaded by {attachment.user.firstName} on {new Date(attachment.uploaded_date).toLocaleString()}</small></p>
+                  <p><small>Uploaded by {attachment.user.firstName} {attachment.user.lastName} on {new Date(attachment.uploaded_date).toLocaleString()}</small></p>
                 </li>
               ))}
             </ul>

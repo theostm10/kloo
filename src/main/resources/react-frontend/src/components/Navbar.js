@@ -1,16 +1,23 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/Navbar.css';
 
 const Navbar = () => {
   const { isAuthenticated, userEmail, logout, isAdmin } = useAuth();
   const history = useHistory();
+  const location = useLocation();
 
   const handleLogout = () => {
     logout();
     history.push('/login');
   };
+
+  // Check if the current route is the ProjectDetail page
+  const isProjectDetailPage = location.pathname.startsWith('/projects/');
+
+  // Extract the project ID from the URL (assuming the URL is in the form /projects/:id)
+  const projectId = location.pathname.split('/')[2];
 
   return (
     <nav className="sidebar">
@@ -28,6 +35,9 @@ const Navbar = () => {
         ) : (
           <>
             <li><Link to="/projects" className="sidebar-item">Projects</Link></li>
+            {isProjectDetailPage && (
+              <li><Link to={`/projects/${projectId}/tasks`} className="sidebar-item">All Tasks</Link></li>
+            )}
             <li><Link to="/teams" className="sidebar-item">Teams</Link></li>
             {isAdmin && (
               <li><Link to="/admin/users" className="sidebar-item">Manage Users</Link></li>

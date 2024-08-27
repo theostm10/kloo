@@ -2,6 +2,7 @@ package com.licenta.licenta.rest;
 
 import com.licenta.licenta.data.dto.UserDto;
 import com.licenta.licenta.data.dto.UserProjectDto;
+import com.licenta.licenta.data.entity.User;
 import com.licenta.licenta.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,6 +41,12 @@ public class UserApiRest {
     public ResponseEntity<UserDto> updateUser(@PathVariable UUID id, @RequestBody UserDto userDto) {
         UserDto updatedUser = userService.updateUser(id, userDto);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
     }
 }
 
