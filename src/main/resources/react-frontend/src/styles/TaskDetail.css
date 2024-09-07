@@ -3,7 +3,7 @@
 .task-detail-container {
   display: flex;
   justify-content: space-between;
-  margin-left: 240px; /* Adjust to prevent overlapping with the navbar */
+  margin-left: 240px;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -169,4 +169,69 @@
 .error-message {
   color: #dc3545;
   margin-bottom: 15px;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.attachment-item a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.attachment-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.attachment-name {
+  font-weight: bold;
+  color: #007bff;
+  text-decoration: none;
+  margin-left: 10px; /* Ensures the file name starts aligned with "Uploaded by" */
+}
+
+.attachment-meta {
+  font-size: 0.85em;
+  color: #666;
+  margin-left: 10px; /* Aligns with the file name */
+}
+
+.btn-delete-attachment {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.btn-delete-attachment:hover {
+  background-color: #ff4c4c;
 }

@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface AttachmentRepo extends JpaRepository<Attachment, UUID> {
     List<Attachment> findByTaskId(UUID taskId);
     List<Attachment> findByUserId(UUID userId);
+
+    void deleteByTaskId(UUID taskId);
 }

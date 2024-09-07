@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import TeamService from '../services/TeamService';
+import { useAuth } from '../contexts/AuthContext';
 import '../styles/TeamList.css';
 
 function TeamsPage() {
+  const {isAdmin, isTeamLeader} = useAuth();
   const [teams, setTeams] = useState([]);
   const [filteredTeams, setFilteredTeams] = useState([]);
   const [error, setError] = useState('');
@@ -57,11 +59,13 @@ function TeamsPage() {
             placeholder="Search teams..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-bar"
+            className="search-bar-team-list"
           />
-          <button onClick={handleCreateTeam} className="btn btn-primary create-team-button">
-            + Create New Team
+          {(isAdmin || isTeamLeader) && (
+          <button onClick={handleCreateTeam} className="create-team-button-team-list">
+            New Team
           </button>
+          )}
         </div>
       </header>
       {error && <p className="error-message">{error}</p>}
@@ -71,7 +75,8 @@ function TeamsPage() {
             <h3 className="team-name">{team.name}</h3>
             <div className="team-actions">
               <Link to={`/teams/${team.id}`} className="btn btn-secondary">View</Link>
-              <button onClick={() => handleDeleteTeam(team.id)} className="btn btn-danger">Delete</button>
+              {(isAdmin || isTeamLeader) && (
+              <button onClick={() => handleDeleteTeam(team.id)} className="btn btn-danger">Delete</button>)}
             </div>
           </div>
         ))}

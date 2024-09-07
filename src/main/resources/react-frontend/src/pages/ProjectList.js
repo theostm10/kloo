@@ -34,15 +34,17 @@ function ProjectsPage() {
   }, [searchQuery, projects]);
 
   const handleDeleteProject = async (id) => {
-    try {
-      await ProjectService.deleteProject(id);
-      setProjects(projects.filter(project => project.id !== id));
-    } catch (error) {
-      setError('Failed to delete project. Please try again.');
-      console.error('Error deleting project:', error);
+    if (window.confirm("Are you sure you want to delete this project? All related tasks, sprints, and user assignments will be deleted.")) {
+      try {
+        await ProjectService.deleteProject(id);
+        setProjects(projects.filter(project => project.id !== id));
+        setFilteredProjects(filteredProjects.filter(project => project.id !== id));
+      } catch (error) {
+        setError('Failed to delete project. Please try again.');
+        console.error('Error deleting project:', error);
+      }
     }
   };
-
   const handleCreateProject = () => {
     history.push('/projects/new');
   };
@@ -57,10 +59,10 @@ function ProjectsPage() {
           placeholder="Search projects..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-bar"
+          className="search-bar-project-list"
         />
-        <button onClick={handleCreateProject} className="btn btn-primary create-project">
-          Create New Project
+        <button onClick={handleCreateProject} className="create-project-button-project-list">
+          New Project
         </button>
       </div>
       <div className="projects-list">

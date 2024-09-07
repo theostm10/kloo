@@ -1,23 +1,33 @@
+/* Container for Assign User Form */
 .assign-user-container {
+  position: absolute;
+  top: 10%;
+  left: 35%;
+  padding: 40px;
+  background-color: #ffffff;
+  margin: 60px auto;
+  border-radius: 12px;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
   max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f7f9fc;
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
+/* Title Styling */
 .assign-user-container h1 {
-  font-size: 2rem;
-  color: #2c3e50;
-  margin-bottom: 20px;
+  font-size: 2.5rem;
+  color: #34495e;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 700;
 }
 
+/* Message Styling */
 .error-message, .success-message {
   font-weight: bold;
-  margin-bottom: 20px;
-  padding: 10px;
-  border-radius: 4px;
+  margin-bottom: 25px;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
 }
 
 .error-message {
@@ -30,44 +40,60 @@
   background-color: #eafaf1;
 }
 
+/* Form Styling */
 .assign-user-form .input-group {
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
 .assign-user-form .input-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   font-weight: 600;
   color: #34495e;
+  font-size: 1.1rem;
 }
 
 .assign-user-form .input-group select,
 .assign-user-form .input-group input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #bdc3c7;
-  border-radius: 4px;
+  border-radius: 6px;
   box-sizing: border-box;
+  font-size: 1.1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+.assign-user-form .input-group select:focus,
+.assign-user-form .input-group input:focus {
+  border-color: #2980b9;
+  box-shadow: 0px 0px 8px rgba(41, 128, 185, 0.3);
+}
+
+/* Button Styling */
 .assign-user-form .btn-primary {
   display: inline-block;
-  padding: 10px 20px;
+  width: 100%;
+  padding: 12px;
   background-color: #3498db;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   border: none;
   cursor: pointer;
+  font-size: 1.2rem;
 }
 
 .assign-user-form .btn-primary:hover {
   background-color: #2980b9;
+  box-shadow: 0px 4px 12px rgba(41, 128, 185, 0.3);
 }
 
+/* Info Message Styling */
 .info-message {
   color: #ff9900;
-  font-size: 0.9em;
-  margin-top: 10px;
+  font-size: 1rem;
+  margin-top: 15px;
+  text-align: center;
 }

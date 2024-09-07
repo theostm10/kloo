@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface SprintRepo extends JpaRepository<Sprint, UUID> {
     List<Sprint> findByProjectId(UUID projectId);
+
+    void deleteByProjectId(UUID projectId);
 }

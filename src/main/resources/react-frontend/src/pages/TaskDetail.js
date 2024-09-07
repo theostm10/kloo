@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import TaskService from '../services/TaskService';
 import CommentService from '../services/CommentService';
 import AttachmentService from '../services/AttachmentService';
-import UserProjectService from '../services/UserProjectService'; // Import UserProjectService
-import SprintService from '../services/SprintService'; // Import SprintService
+import UserProjectService from '../services/UserProjectService';
+import SprintService from '../services/SprintService';
 import UserService from '../services/UserService';
 import '../styles/TaskDetail.css';
 
@@ -18,6 +18,8 @@ function TaskDetail() {
   const [users, setUsers] = useState([]);
   const [sprints, setSprints] = useState([]);
   const [error, setError] = useState('');
+  const [attachmentError, setAttachmentError] = useState('');  // Separate state for attachment errors
+  const [successMessage, setSuccessMessage] = useState('');  // State for success messages
 
   useEffect(() => {
     fetchTaskDetails();
@@ -94,6 +96,22 @@ function TaskDetail() {
 
   const handleAttachmentUpload = async (e) => {
     e.preventDefault();
+
+    if (!newAttachment) {
+        setAttachmentError('Please select a file to upload.');
+        return;
+    }
+
+    // Check if the attachment already exists
+    const existingAttachment = attachments.find(
+        attachment => attachment.file_path.split('/').pop() === newAttachment.name
+    );
+
+    if (existingAttachment) {
+        setAttachmentError('This attachment already exists.');
+        return;
+    }
+
     try {
         const formData = new FormData();
         formData.append('file', newAttachment);
@@ -102,9 +120,10 @@ function TaskDetail() {
 
         await AttachmentService.createAttachment(formData);
         setNewAttachment(null);
-        fetchTaskDetails();
+        fetchTaskDetails(); // Refresh task details to get the latest attachments
+        setAttachmentError('');  // Clear any previous attachment errors
     } catch (err) {
-        setError('Failed to upload attachment.');
+        setAttachmentError('Failed to upload attachment.');
         console.error('Error uploading attachment:', err);
     }
 };
@@ -114,10 +133,24 @@ function TaskDetail() {
     try {
       const updatedTask = { ...task };
       await TaskService.updateTask(id, updatedTask);
-      fetchTaskDetails();
+      setSuccessMessage('Task Updated');
+      setTimeout(() => {
+        setSuccessMessage('');  // Clear the success message after 2 seconds
+        window.location.reload(); // Reload the page
+      }, 2000); // Adjust the timeout as needed
     } catch (err) {
       setError('Failed to update task.');
       console.error('Error updating task:', err);
+    }
+  };
+
+  const handleDeleteAttachment = async (attachmentId) => {
+    try {
+      await AttachmentService.deleteAttachment(attachmentId);
+      fetchTaskDetails(); // Refresh the task details after deletion
+    } catch (err) {
+      setError('Failed to delete attachment.');
+      console.error('Error deleting attachment:', err);
     }
   };
 
@@ -186,7 +219,7 @@ function TaskDetail() {
                 <option value="">Select Type</option>
                 <option value="TASK_BUG">Bug</option>
                 <option value="TASK_STORY">Task</option>
-                <option value="TASK_INVESTIGATION">Invvestigation</option>
+                <option value="TASK_INVESTIGATION">Investigation</option>
               </select>
             </div>
             <div className="input-group">
@@ -222,27 +255,38 @@ function TaskDetail() {
               </select>
             </div>
             <button type="submit" className="btn btn-primary">Update Task</button>
+            {successMessage && <p className="success-message">{successMessage}</p>} {/* Display success message under the button */}
           </form>
 
           <section className="attachments-section">
             <h2>Attachments</h2>
             <form onSubmit={handleAttachmentUpload}>
-              <input
-                type="file"
-                onChange={(e) => setNewAttachment(e.target.files[0])}
-                required
-              />
-              <button type="submit" className="btn btn-primary">Upload Attachment</button>
+                <input
+                    type="file"
+                    onChange={(e) => setNewAttachment(e.target.files[0])}
+                    required
+                />
+                <button type="submit" className="btn btn-primary">Upload Attachment</button>
             </form>
+            {attachmentError && <p className="error-message">{attachmentError}</p>} {/* Display attachment-specific error here */}
             <ul>
-              {attachments.map(attachment => (
-                <li key={attachment.id}>
-                  <a href={`/${attachment.file_path}`} download>
-                    {attachment.file_path.split('/').pop()} {/* Just the file name */}
-                  </a>
-                  <p><small>Uploaded by {attachment.user.firstName} {attachment.user.lastName} on {new Date(attachment.uploaded_date).toLocaleString()}</small></p>
-                </li>
-              ))}
+                {attachments.map(attachment => (
+                    <li key={attachment.id} className="attachment-item">
+                        <div className="attachment-info">
+                            <a href={`/${attachment.file_path}`} download className="attachment-name">
+                                {attachment.file_path.split('/').pop()}
+                            </a>
+                            <p className="attachment-meta">
+                                Uploaded by {attachment.user.firstName} {attachment.user.lastName} on {new Date(attachment.uploaded_date).toLocaleString()}
+                            </p>
+                        </div>
+                        <button 
+                            onClick={() => handleDeleteAttachment(attachment.id)} 
+                            className="btn-delete-attachment">
+                            ✖
+                        </button>
+                    </li>
+                ))}
             </ul>
           </section>
 

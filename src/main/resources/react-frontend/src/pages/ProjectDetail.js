@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import ProjectService from '../services/ProjectService';
+import { useAuth } from '../contexts/AuthContext';
 import TaskService from '../services/TaskService';
 import SprintService from '../services/SprintService';
 import UserProject from '../services/UserProjectService';
 import '../styles/ProjectDetail.css';
 
 function ProjectDetail() {
+  const {userId} = useAuth();
   const { id } = useParams(); // Get project ID from URL parameters
   const [project, setProject] = useState(null);
   const [tasks, setTasks] = useState([]);
@@ -22,15 +24,12 @@ function ProjectDetail() {
 
   const fetchProjectDetails = async () => {
     try {
-      // Fetch project information
       const projectData = await ProjectService.getProjectById(id);
       setProject(projectData);
 
-      // Fetch tasks associated with the project
       const tasksData = await TaskService.getTasksByProjectId(id);
       setTasks(tasksData);
 
-      // Fetch sprints associated with the project
       const sprintsData = await SprintService.getSprintsByProjectId(id);
       setSprints(sprintsData);
 
@@ -43,6 +42,8 @@ function ProjectDetail() {
       setLoading(false);
     }
   };
+
+  const userTasks = tasks.filter(task => task.assigned_to === userId);
 
   if (loading) {
     return <div className="loading">Loading project details...</div>;
@@ -63,7 +64,7 @@ function ProjectDetail() {
             <div className="column">
               <h2 className="section-title">My Tasks</h2>
               <ul className="item-list">
-                {tasks.map((task) => (
+                {userTasks.map((task) => (
                   <li key={task.id} className="item">
                     <Link to={`/projects/${id}/tasks/${task.id}`} className="item-link">{task.title}</Link>
                   </li>

@@ -23,7 +23,7 @@ const Navbar = () => {
     <nav className="sidebar">
       <div className="sidebar-header">
         <Link to="/" className="sidebar-logo">
-          <img src="/your-logo.png" alt="Your App Logo" />
+          <img src="/uploads/k.png" alt="Your App Logo" />
         </Link>
       </div>
       <ul className="sidebar-menu">
@@ -36,7 +36,10 @@ const Navbar = () => {
           <>
             <li><Link to="/projects" className="sidebar-item">Projects</Link></li>
             {isProjectDetailPage && (
+              <>
               <li><Link to={`/projects/${projectId}/tasks`} className="sidebar-item">All Tasks</Link></li>
+              <li><Link to={`/projects/${projectId}/sprints`} className="sidebar-item">All Sprints</Link></li>
+              </>
             )}
             <li><Link to="/teams" className="sidebar-item">Teams</Link></li>
             {isAdmin && (

@@ -1,63 +1,90 @@
-/* AddTeamMember.css */
+/* Container for Add Team Member Form */
 .add-team-member-container {
-  padding: 20px;
-  background-color: #f7f9fc;
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  margin: 0 auto;
+  position: absolute;
+  top: 5%;
+  left: 35%;
+  padding: 40px;
+  background-color: #ffffff;
+  margin: 60px auto;
+  border-radius: 12px;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
 }
 
+/* Title Styling */
 .add-team-member-container h1 {
-  font-size: 2rem;
-  color: #2c3e50;
-  margin-bottom: 20px;
+  font-size: 2.5rem;
+  color: #34495e;
+  margin-bottom: 30px;
   text-align: center;
+  font-weight: 700;
 }
 
+/* Form Styling */
 .add-team-member-form .input-group {
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
 .add-team-member-form label {
   display: block;
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 5px;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
 }
 
 .add-team-member-form select,
 .add-team-member-form input {
   width: 100%;
-  padding: 10px;
-  border-radius: 4px;
+  padding: 12px;
+  border-radius: 6px;
   border: 1px solid #bdc3c7;
+  font-size: 1.1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.btn {
+.add-team-member-form select:focus,
+.add-team-member-form input:focus {
+  border-color: #2980b9;
+  box-shadow: 0px 0px 8px rgba(41, 128, 185, 0.3);
+}
+
+/* Button Styling */
+.add-team-member-form .btn {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background-color: #3498db;
-  color: white;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   border: none;
-  border-radius: 4px;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-size: 1.2rem;
 }
 
-.btn:hover {
+.add-team-member-form .btn:hover {
   background-color: #2980b9;
+  box-shadow: 0px 4px 12px rgba(41, 128, 185, 0.3);
+}
+
+/* Message Styling */
+.error-message, .success-message {
+  font-weight: bold;
+  margin-bottom: 25px;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
 }
 
 .error-message {
   color: #e74c3c;
-  font-weight: bold;
-  text-align: center;
+  background-color: #fdecea;
 }
 
 .success-message {
   color: #2ecc71;
-  font-weight: bold;
-  text-align: center;
+  background-color: #eafaf1;
 }

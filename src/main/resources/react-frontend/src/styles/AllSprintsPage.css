@@ -1,0 +1,181 @@
+/* General Container */
+.all-sprints-container {
+  padding: 40px;
+  background-color: #ecf0f1;
+  min-height: 100vh;
+  margin-left: 240px;
+  box-sizing: border-box;
+}
+
+.all-sprints-container h1 {
+  font-size: 2.4rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Controls */
+.controls-task-list {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-bar-project-all-tasks {
+  padding: 10px;
+  border-radius: 25px;
+  border: 1px solid #bdc3c7;
+  font-size: 1rem;
+  outline: none;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.search-bar-project-all-tasks:focus {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.create-sprint-button {
+  padding: 8px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.create-sprint-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-3px);
+}
+
+/* Sprints Table */
+.sprints-table {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  text-align: center;
+  table-layout: fixed; /* Ensures the columns have a fixed width */
+}
+
+.sprints-table thead th,
+.sprints-table tbody td {
+  padding: 15px;
+  text-align: center;
+  vertical-align: middle;
+  word-wrap: break-word; /* Ensures long text wraps within the cell */
+}
+
+.sprints-table thead th {
+  background-color: #3498db;
+  color: white;
+  font-weight: bold;
+}
+
+/* Set fixed widths for each column */
+.sprints-table thead th:nth-child(1),
+.sprints-table tbody td:nth-child(1) {
+  width: 50px; /* Fixed width for "No." column */
+}
+
+.sprints-table thead th:nth-child(2),
+.sprints-table tbody td:nth-child(2) {
+  width: 100px; /* Fixed width for "Priority" column */
+}
+
+.sprints-table thead th:nth-child(3),
+.sprints-table tbody td:nth-child(3) {
+  width: 200px; /* Fixed width for "Name" column */
+}
+
+.sprints-table thead th:nth-child(4),
+.sprints-table tbody td:nth-child(4) {
+  width: 100px; /* Fixed width for "Type" column */
+}
+
+.sprints-table thead th:nth-child(5),
+.sprints-table tbody td:nth-child(5) {
+  width: 50px; /* Fixed width for "Status" column */
+}
+
+.sprints-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.sprints-table .task-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.sprints-table .btn {
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.sprints-table .btn-primary {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.sprints-table .btn-primary:hover {
+  background-color: #2980b9;
+}
+
+.sprint-link {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.sprint-link:hover {
+  text-decoration: underline;
+}
+
+.action-column {
+  text-align: center;
+}
+
+.delete-task-button {
+  padding: 6px 12px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.delete-task-button:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .all-sprints-container {
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .controls-task-list {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-bar-project-all-tasks,
+  .create-sprint-button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+}

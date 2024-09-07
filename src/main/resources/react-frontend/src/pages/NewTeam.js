@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import TeamService from '../services/TeamService';
+import TeamMemberService from '../services/TeamMemberService';
 import '../styles/NewTeam.css';
 
 function NewTeamPage() {
+  const {userId} = useAuth();
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -17,6 +20,15 @@ function NewTeamPage() {
     try {
       const teamData = { name };
       const createdTeam = await TeamService.createTeam(teamData);
+
+      const teamMemberDto = {
+        team: createdTeam.id,
+        user: userId,
+      };
+
+      if (userId) {
+        await TeamMemberService.addTeamMember(teamMemberDto);
+      }
       setSuccess('Team created successfully!');
       
       // Redirect to the team details page or teams list
@@ -46,7 +58,7 @@ function NewTeamPage() {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">Create Team</button>
+        <button type="submit" className="button-create-team">Create Team</button>
       </form>
     </div>
   );

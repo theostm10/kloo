@@ -56,6 +56,22 @@ class UserService {
       throw error;
     }
   }
+
+  static async getUserByEmail(email) {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/v1/users/email`, {
+            params: { email },  // Sending email as a query parameter
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error getting user:', error);
+        throw error;
+    }
+  }
+
 }
 
 export default UserService;

@@ -10,4 +10,5 @@ public interface TaskRepo extends JpaRepository<Task, UUID> {
     List<Task> findByProjectId(UUID projectId);
     List<Task> findBySprintId(UUID sprintId);
     List<Task> findByAssignedTo_Id(UUID assignedToId);
+    void deleteByProjectId(UUID projectId);
 }

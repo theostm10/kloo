@@ -58,7 +58,7 @@ function SprintTasks() {
   };
 
   const handleCreateTask = () => {
-    history.push(`/projects/${id}/add-task`);
+    history.push(`/projects/${id}/sprints/${sprintId}/add-task`);
   };
 
   if (loading) {
@@ -72,7 +72,7 @@ function SprintTasks() {
   return (
     <div className="sprint-tasks-container">
       <h1>{sprint.name} - Tasks</h1>
-      <div className="controls">
+      <div className="controls-sprint-tasks">
         <input
           type="text"
           placeholder="Search tasks..."
@@ -80,7 +80,7 @@ function SprintTasks() {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar"
         />
-        <button onClick={handleCreateTask} className="btn btn-primary create-task-button">
+        <button onClick={handleCreateTask} className="create-task-button">
           Add Task
         </button>
       </div>

@@ -5,6 +5,7 @@ import com.licenta.licenta.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class ProjectApiRest{
     @Autowired
     private ProjectService projectService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROJECTMANAGER')")
     @PostMapping
     public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectDto projectDTO) {
         ProjectDto createdProject = projectService.createProject(projectDTO);

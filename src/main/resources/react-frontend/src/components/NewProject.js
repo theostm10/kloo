@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import ProjectService from '../services/ProjectService';
 import '../styles/NewProject.css';
+import UserProjectService from '../services/UserProjectService';
+import UserService from '../services/UserService';
+
 
 function NewProject() {
+  const {userId} = useAuth();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
@@ -23,6 +28,16 @@ function NewProject() {
       };
 
       const createdProject = await ProjectService.createProject(projectDto);
+
+      const userProjectDto = {
+        user: userId,
+        project: createdProject.id,
+      };
+
+      if (userId) {
+        await UserProjectService.assignUserToProject(userProjectDto);
+      }
+
       setSuccess('Project created successfully!');
       
       // Redirect to the project details page or projects list
@@ -61,7 +76,7 @@ function NewProject() {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">Create Project</button>
+        <button type="submit" className="button-create-project">Create Project</button>
       </form>
     </div>
   );

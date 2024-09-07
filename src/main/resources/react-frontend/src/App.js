@@ -17,6 +17,7 @@ import AddTeamMember from './pages/AddTeamMember';
 import AllTasksPage  from './pages/AllTasksPage.js';
 import TaskDetail from './pages/TaskDetail';
 import SprintTasks from './pages/SprintTasks.js'
+import AllSprintsPage from './pages/AllSprintsPage.js'
 import CreateTask from './pages/CreateTask';
 import AssignUser from './pages/AssignUser';
 import ManageUsers from './components/ManageUsers'; // Import the new component
@@ -44,19 +45,25 @@ function MainApp() {
             <Route path="/home" component={Home} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
+
+            <ProtectedRoute path="/projects/:id/sprints/:sprintId/add-task" component={CreateTask} />
+            <ProtectedRoute path="/projects/:id/add-task" component={CreateTask} />
+            <ProtectedRoute path="/projects/:id/sprints/:sprintId/tasks" component={SprintTasks} />
             <ProtectedRoute path="/projects/:id/tasks/:id" component={TaskDetail} />
             <ProtectedRoute path="/projects/:id/tasks" component={AllTasksPage} />
-            <ProtectedRoute path="/projects/:id/sprints/:sprintId/tasks" component={SprintTasks} />
+            
+            <ProtectedRoute path="/projects/:id/sprints" component={AllSprintsPage} />
             <ProtectedRoute path="/projects/:id/add-sprint" component={CreateSprint} />
-            <ProtectedRoute path="/projects/:id/add-task" component={CreateTask} />
             <ProtectedRoute path="/projects/:id/assign-user" component={AssignUser} />
             <ProtectedRoute path="/projects/new" component={NewProject} />
             <ProtectedRoute path="/projects/:id" component={ProjectDetail} />
             <ProtectedRoute path="/projects" component={ProjectList} />
+
             <ProtectedRoute path="/teams/new" component={NewTeamPage} />
             <ProtectedRoute path="/teams/:teamId/add-member" component={AddTeamMember} />
             <ProtectedRoute path="/teams/:id" component={TeamDetail} />
             <ProtectedRoute path="/teams" component={TeamList} />
+
             <ProtectedRoute path="/edit-account" component={EditAccount} />
             <ProtectedRoute path="/admin/users" component={ManageUsers} />
           </Switch>

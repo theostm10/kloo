@@ -5,6 +5,7 @@ import com.licenta.licenta.data.entity.Team;
 import com.licenta.licenta.data.entity.User;
 import com.licenta.licenta.exception.DuplicateTeamException;
 import com.licenta.licenta.exception.ResourceNotFoundException;
+import com.licenta.licenta.repo.TeamMemberRepo;
 import com.licenta.licenta.repo.TeamsRepo;
 import com.licenta.licenta.repo.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class TeamService {
 
     @Autowired
     private UsersRepo usersRepo;
+
+    @Autowired
+    private TeamMemberRepo teamMemberRepo;
 
     public TeamDto createTeam(TeamDto teamDto) {
         String username = getAuthenticatedUsername();
@@ -53,9 +57,13 @@ public class TeamService {
         return convertToDto(updatedTeam);
     }
 
+    @Transactional
     public void deleteTeam(UUID id) {
         Team team = teamsRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Team not found with id " + id));
+
+        teamMemberRepo.deleteByTeamId(id);
+
         teamsRepo.delete(team);
     }
 

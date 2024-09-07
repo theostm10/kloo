@@ -4,12 +4,12 @@ import com.licenta.licenta.data.dto.ProjectDto;
 import com.licenta.licenta.data.entity.Project;
 import com.licenta.licenta.data.entity.User;
 import com.licenta.licenta.exception.ResourceNotFoundException;
-import com.licenta.licenta.repo.ProjectRepo;
-import com.licenta.licenta.repo.UsersRepo;
+import com.licenta.licenta.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +23,15 @@ public class ProjectService {
 
     @Autowired
     private UsersRepo usersRepo;
+
+    @Autowired
+    private TaskRepo taskRepo;
+
+    @Autowired
+    private SprintRepo sprintRepo;
+
+    @Autowired
+    private UserProjectRepo userProjectRepo;
 
     public ProjectDto createProject(ProjectDto projectDTO) {
         String username = getAuthenticatedUsername();
@@ -49,9 +58,20 @@ public class ProjectService {
         return convertToDto(updatedProject);
     }
 
+    @Transactional
     public void deleteProject(UUID id) {
         Project project = projectRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + id));
+        // Delete all related tasks
+        taskRepo.deleteByProjectId(id);
+
+        // Delete all related sprints
+        sprintRepo.deleteByProjectId(id);
+
+        // Delete all related user-project assignments
+        userProjectRepo.deleteByProjectId(id);
+
+        // Finally, delete the project
         projectRepo.delete(project);
     }
 

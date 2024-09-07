@@ -43,7 +43,19 @@ class SprintService {
       throw error;
     }
   }
-  
+  static async deleteSprint(sprintId) {
+    try {
+      const response = await axios.delete(`${API_URL}/${sprintId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`, // Ensure the user is authenticated
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting sprint:', error);
+      throw error;
+    }
+  }
 }
 
 export default SprintService;

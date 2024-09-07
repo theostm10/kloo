@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 @Table(name = "attachments")
 public class Attachment extends BaseEntity {
 
-    @Column(name ="file_path", unique = true, nullable = false)
+    @Column(name ="file_path", unique = false, nullable = false)
     private String file_path;
 
     @Column(name = "uploaded_date", unique = false, nullable = false)

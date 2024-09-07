@@ -3,6 +3,7 @@ package com.licenta.licenta.rest;
 import com.licenta.licenta.data.dto.UserDto;
 import com.licenta.licenta.data.dto.UserProjectDto;
 import com.licenta.licenta.data.entity.User;
+import com.licenta.licenta.exception.ResourceNotFoundException;
 import com.licenta.licenta.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,5 +49,7 @@ public class UserApiRest {
         User user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
+
+
 }
 

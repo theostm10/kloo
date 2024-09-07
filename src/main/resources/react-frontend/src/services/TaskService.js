@@ -3,6 +3,20 @@ import axios from 'axios';
 const API_URL = 'http://localhost:8080/api/v1/tasks';
 
 class TaskService {
+  static async createTask(taskDto) {
+    try {
+      const response = await axios.post(API_URL, taskDto, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error creating task', error);
+      throw error;
+    }
+  }
+  
   static async getTasksByProjectId(projectId) {
     try {
       const response = await axios.get(`${API_URL}/by-project/${projectId}`, {
@@ -31,19 +45,6 @@ class TaskService {
     }
   }
 
-  static async createTask(taskDto) {
-    try {
-      const response = await axios.post(API_URL, taskDto, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error creating task', error);
-      throw error;
-    }
-  }
 
   static async getTasksBySprintId(sprintId) {
     try {
@@ -71,6 +72,20 @@ class TaskService {
     } catch (error) {
       console.error('Error updating task:', error);
       throw error; // Re-throw the error for handling in the calling code
+    }
+  }
+
+  static async deleteTask(taskId) {
+    try {
+      const response = await axios.delete(`${API_URL}/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      throw error;
     }
   }
 }

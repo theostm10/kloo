@@ -69,7 +69,7 @@ function TeamDetailPage() {
           )}
         </tbody>
       </table>
-      <Link to={`/teams/${teamId}/add-member`} className="btn btn-primary">
+      <Link to={`/teams/${teamId}/add-member`} className="add-member-button">
         Add a Member
       </Link>
     </div>

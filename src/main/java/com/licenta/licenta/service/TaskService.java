@@ -3,14 +3,12 @@ package com.licenta.licenta.service;
 import com.licenta.licenta.data.dto.TaskDto;
 import com.licenta.licenta.data.entity.*;
 import com.licenta.licenta.exception.ResourceNotFoundException;
-import com.licenta.licenta.repo.TaskRepo;
-import com.licenta.licenta.repo.ProjectRepo;
-import com.licenta.licenta.repo.SprintRepo;
-import com.licenta.licenta.repo.UsersRepo;
+import com.licenta.licenta.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -31,6 +29,11 @@ public class TaskService {
 
     @Autowired
     private UsersRepo userRepo;
+
+    @Autowired
+    private AttachmentRepo attachmentRepo;
+
+    @Autowired CommentRepo commentRepo;
 
     public TaskDto createTask(TaskDto taskDto) {
 
@@ -102,9 +105,14 @@ public class TaskService {
         return convertToDto(updatedTask);
     }
 
+    @Transactional
     public void deleteTask(UUID id) {
         Task task = taskRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + id));
+
+        attachmentRepo.deleteById(id);
+        commentRepo.deleteByTaskId(id);
+
         taskRepo.delete(task);
     }
 

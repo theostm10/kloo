@@ -21,4 +21,6 @@ public interface UserProjectRepo extends JpaRepository<UserProject, UUID> {
     List<UserProject> findByProjectId( UUID projectId);
 
     boolean existsByUserIdAndProjectId(UUID userId, UUID projectId);
+
+    void deleteByProjectId(UUID projectId);
 }

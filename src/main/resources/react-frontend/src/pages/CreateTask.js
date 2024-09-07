@@ -6,7 +6,7 @@ import SprintService from '../services/SprintService'; // Make sure you import S
 import '../styles/CreateTask.css';
 
 function CreateTaskPage() {
-  const { id, sprintid } = useParams(); // Project ID
+  const { id, sprintId } = useParams(); // Project ID , Sprint ID
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [type, setType] = useState('');
@@ -31,6 +31,10 @@ function CreateTaskPage() {
 
       setUsers(usersResponse);
       setSprints(sprintsResponse);
+
+      if (sprintId) {
+        setSprint(sprintId);
+      }
     } catch (err) {
       setError('Failed to load users or sprints.');
       console.error('Error fetching users or sprints:', err);

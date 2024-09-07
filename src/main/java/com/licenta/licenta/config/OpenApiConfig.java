@@ -14,9 +14,9 @@ import io.swagger.v3.oas.annotations.servers.Server;
 @OpenAPIDefinition(
         info = @Info(
                 contact = @Contact(
-                        name = "Alibou",
-                        email = "snitulescu2001@yahoo.com",
-                        url = "https://www.linkedin.com/in/stefan-nitulescu-41a565184/"
+                        name = "Stamule Theo",
+                        email = "theostm7@gmail.com",
+                        url = "https://www.linkedin.com/in/theo-stamule-b2a7a9234/"
                 ),
                 description = "OpenApi documentation for Licenta",
                 title = "OpenApi specification - Licenta",
