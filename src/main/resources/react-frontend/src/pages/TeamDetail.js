@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import TeamMemberService from '../services/TeamMemberService';
+import { useAuth } from '../contexts/AuthContext';
 import '../styles/TeamDetail.css';
 
 function TeamDetailPage() {
+  const {isAdmin, isTeamLeader} = useAuth();
   const { id: teamId } = useParams();
   const [teamMembers, setTeamMembers] = useState([]);
   const [error, setError] = useState('');
@@ -23,12 +25,14 @@ function TeamDetailPage() {
   };
 
   const handleRemoveMember = async (memberId) => {
-    try {
-      await TeamMemberService.removeTeamMember(memberId);
-      fetchTeamMembers(); // Refresh the team members list after deletion
-    } catch (error) {
-      setError('Failed to remove team member. Please try again.');
-      console.error('Error removing team member:', error);
+    if (window.confirm("Are you sure you want to delete this project? All related tasks, sprints, and user assignments will be deleted.")) {
+      try {
+        await TeamMemberService.removeTeamMember(memberId);
+        fetchTeamMembers(); // Refresh the team members list after deletion
+      } catch (error) {
+        setError('Failed to remove team member. Please try again.');
+        console.error('Error removing team member:', error);
+      }
     }
   };
 
@@ -36,6 +40,7 @@ function TeamDetailPage() {
     <div className="team-detail-container">
       <h1>Team Members</h1>
       {error && <p className="error-message">{error}</p>}
+      <div className="table-container">
       <table className="team-members-table">
         <thead>
           <tr>
@@ -55,7 +60,7 @@ function TeamDetailPage() {
                 <td>
                   <button
                     onClick={() => handleRemoveMember(member.id)}
-                    className="btn btn-danger"
+                    className="button-remove-member"
                   >
                     Remove
                   </button>
@@ -69,9 +74,10 @@ function TeamDetailPage() {
           )}
         </tbody>
       </table>
-      <Link to={`/teams/${teamId}/add-member`} className="add-member-button">
-        Add a Member
-      </Link>
+      </div>
+      {(isAdmin || isTeamLeader) && (
+      <button onClick={() => window.location.href = `/teams/${teamId}/add-member`} className="add-member-button">Assign User</button>
+      )}
     </div>
   );
 }

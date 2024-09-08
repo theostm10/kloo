@@ -33,10 +33,10 @@ public class UserProjectApiRest {
         return new ResponseEntity<>(createdTeamProject, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeUserFromProject(@PathVariable UUID id) {
-        userProjectService.removeUserFromProject(id);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{userProjectId}")
+    public ResponseEntity<?> removeUserFromProject(@PathVariable UUID userProjectId) {
+        userProjectService.removeUserFromProject(userProjectId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping

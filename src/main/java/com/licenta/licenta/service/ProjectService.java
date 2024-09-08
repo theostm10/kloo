@@ -6,10 +6,12 @@ import com.licenta.licenta.data.entity.User;
 import com.licenta.licenta.exception.ResourceNotFoundException;
 import com.licenta.licenta.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -40,6 +42,10 @@ public class ProjectService {
         project.setDescription(projectDTO.getDescription());
         project.setUser(usersRepo.findByEmail(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + projectDTO.getUserId())));
+
+        if (projectRepo.findByName(projectDTO.getName()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Project with name " + projectDTO.getName() + " already exists.");
+        }
 
         Project savedProject = projectRepo.save(project);
         return convertToDto(savedProject);

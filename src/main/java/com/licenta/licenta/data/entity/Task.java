@@ -47,6 +47,7 @@ public class Task extends BaseEntity {
     @JoinColumn(name = "sprint", unique = false, nullable = true)
     private Sprint sprint;
 
+
     @ManyToOne
     @JoinColumn(name = "project", unique = false, nullable = false)
     private Project project;

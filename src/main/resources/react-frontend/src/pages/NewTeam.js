@@ -37,8 +37,11 @@ function NewTeamPage() {
       }, 2000);
 
     } catch (error) {
-      setError('Failed to create team. Please try again.');
-      console.error('Error creating team:', error);
+      if (error.response && error.response.status === 409) {
+        setError(error.response.data); // Display the backend error message (e.g., "Name already used")
+      } else {
+        setError('Failed to create the team. Please try again.');
+      }
     }
   };
 

@@ -19,7 +19,6 @@ function AllTasksPage() {
   const [selectedStatus, setSelectedStatus] = useState(''); // Selected status filter
   const [selectedPriority, setSelectedPriority] = useState(''); // Selected priority filter
   const [selectedSprint, setSelectedSprint] = useState(''); // Selected sprint filter
-  const [selectedAssignedTo, setSelectedAssignedTo] = useState(''); // Selected "Assigned To" filter
   const history = useHistory();
 
   useEffect(() => {
@@ -30,7 +29,7 @@ function AllTasksPage() {
 
   useEffect(() => {
     applyFilters();
-  }, [searchQuery, selectedUser, selectedStatus, selectedPriority, selectedSprint, selectedAssignedTo, tasks]);
+  }, [searchQuery, selectedUser, selectedStatus, selectedPriority, selectedSprint, tasks]);
 
   const fetchUsers = async () => {
     try {
@@ -65,7 +64,7 @@ function AllTasksPage() {
       task.assigned_to = userData; // Assuming the response has firstName and lastName fields
     } catch (err) {
       console.error(`Failed to fetch user details for user ID ${task.assigned_to}`, err);
-      task.assigned_to = 'Unknown User';
+      task.assigned_to = null; // Set it to null if the user is not found
     }
   };
 
@@ -101,11 +100,19 @@ function AllTasksPage() {
     }
 
     if (selectedSprint) {
-      filtered = filtered.filter(task => task.sprint && task.sprint.id === selectedSprint);
+      if (selectedSprint === 'no_sprint') {
+        filtered = filtered.filter(task => !task.sprint); // Show tasks with no sprint
+      } else {
+        filtered = filtered.filter(task => task.sprint && task.sprint.id === selectedSprint);
+      }
     }
 
-    if (selectedAssignedTo) {
-      filtered = filtered.filter(task => task.assigned_to && task.assigned_to.id === selectedAssignedTo);
+    if (selectedUser) {
+      if (selectedUser === 'unassigned') {
+        filtered = filtered.filter(task => !task.assigned_to); // Show tasks with no assigned user
+      } else {
+        filtered = filtered.filter(task => task.assigned_to && task.assigned_to.id === selectedUser);
+      }
     }
 
     setFilteredTasks(filtered);
@@ -175,6 +182,7 @@ function AllTasksPage() {
           className="filter-dropdown-all-tasks"
         >
           <option value="">Filter by Sprint</option>
+          <option value="no_sprint">No Sprint</option>
           {sprints.map(sprint => (
             <option key={sprint.id} value={sprint.id}>
               {sprint.name}
@@ -182,11 +190,12 @@ function AllTasksPage() {
           ))}
         </select>
         <select
-          value={selectedAssignedTo}
-          onChange={(e) => setSelectedAssignedTo(e.target.value)}
+          value={selectedUser}
+          onChange={(e) => setSelectedUser(e.target.value)}
           className="filter-dropdown-all-tasks"
         >
           <option value="">Filter by Assigned To</option>
+          <option value="unassigned">Unassigned</option>
           {users.map(user => (
             <option key={user.user.id} value={user.user.id}>
               {user.user.firstName} {user.user.lastName}
@@ -216,8 +225,8 @@ function AllTasksPage() {
               <td><Link to={`/projects/${id}/tasks/${task.id}`} className="task-link">{task.title}</Link></td>
               <td>{task.status}</td>
               <td>{task.priority}</td>
-              <td>{task.assigned_to ? `${task.assigned_to.firstName} ${task.assigned_to.lastName}` : 'Unassigned'}</td>
-              <td>{task.sprint ? task.sprint.name : 'No Sprint'}</td>
+              <td>{task.assigned_to ? `${task.assigned_to.firstName} ${task.assigned_to.lastName}` : <>&nbsp;</>}</td>
+              <td>{task.sprint ? task.sprint.name : <>&nbsp;</>}</td>
               <td className="action-column">
                 <button
                   onClick={() => handleDeleteTask(task.id)}

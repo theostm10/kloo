@@ -18,7 +18,7 @@ public class Comment extends BaseEntity {
     private OffsetDateTime updated_date;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", unique = false, nullable = false)
+    @JoinColumn(name = "user_id", unique = false, nullable = true)
     private User user;
 
     @ManyToOne

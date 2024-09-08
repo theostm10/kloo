@@ -4,11 +4,11 @@ import ProjectService from '../services/ProjectService';
 import { useAuth } from '../contexts/AuthContext';
 import TaskService from '../services/TaskService';
 import SprintService from '../services/SprintService';
-import UserProject from '../services/UserProjectService';
+import UserProjectService from '../services/UserProjectService'; // Make sure this has removeUserFromProject method
 import '../styles/ProjectDetail.css';
 
 function ProjectDetail() {
-  const {userId} = useAuth();
+  const { userId, isAdmin, isProjectManager } = useAuth();
   const { id } = useParams(); // Get project ID from URL parameters
   const [project, setProject] = useState(null);
   const [tasks, setTasks] = useState([]);
@@ -18,7 +18,6 @@ function ProjectDetail() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Fetch project details, tasks, sprints, and team members when the component mounts
     fetchProjectDetails();
   }, []);
 
@@ -33,13 +32,25 @@ function ProjectDetail() {
       const sprintsData = await SprintService.getSprintsByProjectId(id);
       setSprints(sprintsData);
 
-      const usersData = await UserProject.getUsersByProjectId(id);
+      const usersData = await UserProjectService.getUsersByProjectId(id);
       setUserProject(usersData);
 
       setLoading(false);
     } catch (err) {
       setError('Unable to load project details');
       setLoading(false);
+    }
+  };
+
+  const handleRemoveUser = async (userProjectId) => {
+    if (window.confirm('Are you sure you want to remove this user from the project?')) {
+      try {
+        await UserProjectService.removeUserFromProject(userProjectId); 
+        setUserProject(userProject.filter(member => member.id !== userProjectId));
+      } catch (error) {
+        setError('Failed to remove user from project');
+        console.error('Error removing user from project:', error);
+      }
     }
   };
 
@@ -84,19 +95,32 @@ function ProjectDetail() {
                   </li>
                 ))}
               </ul>
-              <button onClick={() => window.location.href = `/projects/${id}/add-sprint`} className="btn btn-primary">Create Sprint</button>
+              {(isAdmin || isProjectManager) && (
+                <button onClick={() => window.location.href = `/projects/${id}/add-sprint`} className="btn btn-primary">Create Sprint</button>
+              )}
             </div>
-            
+
             <div className="column">
-              <h2 className="section-title">Users </h2>
+              <h2 className="section-title">Users</h2>
               <ul className="item-list">
                 {userProject.map((member) => (
                   <li key={member.id} className="item">
                     {member.user.firstName} {member.user.lastName} - {member.user.role.code}
+                    {(isAdmin || isProjectManager) && (
+                      <button
+                        onClick={() => handleRemoveUser(member.id)}
+                        className="remove-project-member"
+                        style={{ marginLeft: '10px' }}
+                      >
+                        Remove
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
-              <button onClick={() => window.location.href = `/projects/${id}/assign-user`} className="btn btn-primary">Assign User</button>
+              {(isAdmin || isProjectManager) && (
+                <button onClick={() => window.location.href = `/projects/${id}/assign-user`} className="btn btn-primary">Assign User</button>
+              )}
             </div>
           </div>
         </>

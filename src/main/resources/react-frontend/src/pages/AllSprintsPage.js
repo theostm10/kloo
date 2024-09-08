@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useHistory } from 'react-router-dom';
 import SprintService from '../services/SprintService';
+import { useAuth } from '../contexts/AuthContext';
 import '../styles/AllSprintsPage.css';
 
 function AllSprintsPage() {
+  const {isAdmin, isProjectManager} = useAuth();
   const { id } = useParams(); // Project ID from the URL
   const [sprints, setSprints] = useState([]);
   const [filteredSprints, setFilteredSprints] = useState([]);
@@ -75,9 +77,11 @@ function AllSprintsPage() {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar-project-all-tasks"
         />
+        {(isAdmin || isProjectManager) && (
         <button onClick={handleCreateSprint} className="create-sprint-button">
           Add Sprint
         </button>
+        )}
       </div>
       <table className="sprints-table">
         <thead>
@@ -86,7 +90,9 @@ function AllSprintsPage() {
             <th>Name</th>
             <th>Start Date</th>
             <th>End Date</th>
-            <th className="action-column">Action</th> {/* Add Action column */}
+            {(isAdmin || isProjectManager) && (
+            <th className="action-column">Action</th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -96,6 +102,7 @@ function AllSprintsPage() {
               <td><Link to={`/projects/${id}/sprints/${sprint.id}/tasks`} className="sprint-link">{sprint.name}</Link></td>
               <td>{new Date(sprint.start_date).toLocaleDateString()}</td>
               <td>{new Date(sprint.end_date).toLocaleDateString()}</td>
+              {(isAdmin || isProjectManager) && (
               <td className="action-column">
                 <button
                   onClick={() => handleDeleteSprint(sprint.id)}
@@ -104,6 +111,7 @@ function AllSprintsPage() {
                   Delete
                 </button>
               </td>
+              )}
             </tr>
           ))}
         </tbody>

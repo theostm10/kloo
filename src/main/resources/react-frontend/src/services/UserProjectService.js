@@ -30,6 +30,20 @@ class UserProjectService {
       throw error;
     }
   }
+
+  static async removeUserFromProject(userProjectId) {
+    try {
+      const response = await axios.delete(`${API_URL}/${userProjectId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error removing user from project:', error);
+      throw error;
+    }
+  }
 }
 
 export default UserProjectService;

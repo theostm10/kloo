@@ -85,6 +85,9 @@ function TaskDetail() {
   };
 
   const handleCommentDelete = async (commentId) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
+    if (!confirmDelete) return; 
+  
     try {
       await CommentService.deleteComment(commentId);
       fetchTaskDetails();
@@ -135,9 +138,9 @@ function TaskDetail() {
       await TaskService.updateTask(id, updatedTask);
       setSuccessMessage('Task Updated');
       setTimeout(() => {
-        setSuccessMessage('');  // Clear the success message after 2 seconds
-        window.location.reload(); // Reload the page
-      }, 2000); // Adjust the timeout as needed
+        setSuccessMessage('');  
+        window.location.reload(); 
+      }, 2000); 
     } catch (err) {
       setError('Failed to update task.');
       console.error('Error updating task:', err);
@@ -145,9 +148,12 @@ function TaskDetail() {
   };
 
   const handleDeleteAttachment = async (attachmentId) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this attachment?');
+    if (!confirmDelete) return; 
+  
     try {
       await AttachmentService.deleteAttachment(attachmentId);
-      fetchTaskDetails(); // Refresh the task details after deletion
+      fetchTaskDetails(); 
     } catch (err) {
       setError('Failed to delete attachment.');
       console.error('Error deleting attachment:', err);
@@ -254,8 +260,10 @@ function TaskDetail() {
                 ))}
               </select>
             </div>
-            <button type="submit" className="btn btn-primary">Update Task</button>
-            {successMessage && <p className="success-message">{successMessage}</p>} {/* Display success message under the button */}
+            <div className="update-task-container">
+              <button type="submit" className="btn btn-primary">Update Task</button>
+              {successMessage && <p className="success-message">{successMessage}</p>}
+            </div>
           </form>
 
           <section className="attachments-section">
@@ -266,7 +274,9 @@ function TaskDetail() {
                     onChange={(e) => setNewAttachment(e.target.files[0])}
                     required
                 />
-                <button type="submit" className="btn btn-primary">Upload Attachment</button>
+                 <div className="upload-attachment-container">
+                  <button onClick={handleAttachmentUpload} className="btn btn-primary">Upload Attachment</button>
+                </div>
             </form>
             {attachmentError && <p className="error-message">{attachmentError}</p>} {/* Display attachment-specific error here */}
             <ul>
@@ -299,7 +309,9 @@ function TaskDetail() {
                 placeholder="Add a comment..."
                 required
               />
-              <button type="submit" className="btn btn-primary">Add Comment</button>
+              <div className="add-comment-container">
+                <button onClick={handleCommentSubmit} className="btn btn-primary">Add Comment</button>
+              </div>
             </form>
             <div className="comments-list">
               <ul>
@@ -312,7 +324,7 @@ function TaskDetail() {
                     </div>
                     <button
                       onClick={() => handleCommentDelete(comment.id)}
-                      className="btn btn-danger delete-comment-btn"
+                      className="delete-comment-btn"
                     >
                       Delete
                     </button>

@@ -106,3 +106,17 @@
 .btn-primary:hover {
   background-color: #2980b9;
 }
+
+.remove-project-member {
+    background-color:#dc3545 ;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-bottom: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.remove-project-member:hover {
+  background-color: #c82333;
+}

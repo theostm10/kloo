@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import ProjectService from '../services/ProjectService';
+import { useAuth } from '../contexts/AuthContext';
 import '../styles/ProjectList.css';
 
 function ProjectsPage() {
+  const {isAdmin, isProjectManager} = useAuth();
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [error, setError] = useState('');
@@ -61,9 +63,11 @@ function ProjectsPage() {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar-project-list"
         />
+        {(isAdmin || isProjectManager) && (
         <button onClick={handleCreateProject} className="create-project-button-project-list">
           New Project
         </button>
+        )}
       </div>
       <div className="projects-list">
         {filteredProjects.map(project => (
@@ -72,7 +76,9 @@ function ProjectsPage() {
             <p>{project.description}</p>
             <div className="project-actions">
               <Link to={`/projects/${project.id}`} className="btn btn-secondary">View Project</Link>
+              {(isAdmin || isProjectManager) && (
               <button onClick={() => handleDeleteProject(project.id)} className="btn btn-danger">Delete</button>
+              )}
             </div>
           </div>
         ))}

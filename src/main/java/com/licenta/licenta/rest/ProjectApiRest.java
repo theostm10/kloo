@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,9 +22,16 @@ public class ProjectApiRest{
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROJECTMANAGER')")
     @PostMapping
-    public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectDto projectDTO) {
-        ProjectDto createdProject = projectService.createProject(projectDTO);
-        return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
+    public ResponseEntity<?> createProject(@RequestBody ProjectDto projectDTO) {
+        try {
+            ProjectDto createdProject = projectService.createProject(projectDTO);
+            return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
+        }
+        catch (ResponseStatusException ex) {
+            // Catch ResponseStatusException and return custom error response
+            return new ResponseEntity<>(ex.getReason(), ex.getStatusCode());
+        }
+
     }
 
     @PutMapping("/{id}")

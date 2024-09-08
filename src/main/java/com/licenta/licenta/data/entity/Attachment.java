@@ -15,11 +15,11 @@ public class Attachment extends BaseEntity {
     private OffsetDateTime uploaded_date;
 
     @ManyToOne
-    @JoinColumn(name = "uploaded_by", unique = false, nullable = false)
+    @JoinColumn(name = "uploaded_by", unique = false, nullable = true)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "task", unique = false, nullable = false)
+    @JoinColumn(name = "task", unique = false, nullable = true)
     private Task task;
 
     public Attachment() {super();}

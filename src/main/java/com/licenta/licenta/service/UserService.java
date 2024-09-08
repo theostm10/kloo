@@ -13,6 +13,7 @@ import com.licenta.licenta.repo.TokensRepo;
 import com.licenta.licenta.repo.UsersRepo;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +57,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteUser(UUID id) {
         if (!usersRepo.existsById(id)) {
             throw new UserNotFoundException("User with id " + id + " does not exist");

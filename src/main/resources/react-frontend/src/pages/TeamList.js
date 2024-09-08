@@ -36,6 +36,9 @@ function TeamsPage() {
   }, [searchQuery, teams]);
 
   const handleDeleteTeam = async (id) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this team?');
+    if (!confirmDelete) return;
+  
     try {
       await TeamService.deleteTeam(id);
       setTeams(teams.filter(team => team.id !== id));

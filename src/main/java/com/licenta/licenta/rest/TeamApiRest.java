@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,9 +23,14 @@ public class TeamApiRest {
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_TEAMMANAGER')")
     @PostMapping
-    public ResponseEntity<TeamDto> createTeam(@RequestBody TeamDto teamDTO) {
-        TeamDto createdTeam = teamsService.createTeam(teamDTO);
-        return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
+    public ResponseEntity<?> createTeam(@RequestBody TeamDto teamDTO) {
+        try {
+            TeamDto createdTeam = teamsService.createTeam(teamDTO);
+            return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
+        } catch (ResponseStatusException ex) {
+            // Catch ResponseStatusException and return custom error response
+            return new ResponseEntity<>(ex.getReason(), ex.getStatusCode());
+        }
     }
 
     @PutMapping("/{id}")

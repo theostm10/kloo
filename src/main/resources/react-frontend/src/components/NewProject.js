@@ -40,14 +40,16 @@ function NewProject() {
 
       setSuccess('Project created successfully!');
       
-      // Redirect to the project details page or projects list
       setTimeout(() => {
         history.push(`/projects/${createdProject.id}`);
       }, 2000);
 
     } catch (error) {
-      setError('Failed to create project. Please try again.');
-      console.error('Error creating project:', error);
+      if (error.response && error.response.status === 409) {
+        setError(error.response.data); 
+      } else {
+        setError('Failed to create the team. Please try again.');
+      }
     }
   };
 

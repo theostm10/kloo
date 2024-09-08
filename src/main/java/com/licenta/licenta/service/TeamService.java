@@ -9,10 +9,12 @@ import com.licenta.licenta.repo.TeamMemberRepo;
 import com.licenta.licenta.repo.TeamsRepo;
 import com.licenta.licenta.repo.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -38,7 +40,7 @@ public class TeamService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + teamDto.getUserId())));
 
         if (teamsRepo.findByName(teamDto.getName()).isPresent()) {
-            throw new DuplicateTeamException("Team with name " + teamDto.getName() + " already exists.");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Team with name " + teamDto.getName() + " already exists.");
         }
         team.setName(teamDto.getName());
         Team savedTeam = teamsRepo.save(team);

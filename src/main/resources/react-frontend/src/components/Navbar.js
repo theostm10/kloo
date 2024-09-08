@@ -10,11 +10,14 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    history.push('/login');
+    history.push('/');
   };
 
   // Check if the current route is the ProjectDetail page
   const isProjectDetailPage = location.pathname.startsWith('/projects/');
+  
+  // Check if the current route is the NewProject page
+  const isNewProjectPage = location.pathname === '/projects/new';
 
   // Extract the project ID from the URL (assuming the URL is in the form /projects/:id)
   const projectId = location.pathname.split('/')[2];
@@ -35,10 +38,11 @@ const Navbar = () => {
         ) : (
           <>
             <li><Link to="/projects" className="sidebar-item">Projects</Link></li>
-            {isProjectDetailPage && (
+            {/* Show these links only if it's a project detail page and not the new project page */}
+            {isProjectDetailPage && !isNewProjectPage && (
               <>
-              <li><Link to={`/projects/${projectId}/tasks`} className="sidebar-item">All Tasks</Link></li>
-              <li><Link to={`/projects/${projectId}/sprints`} className="sidebar-item">All Sprints</Link></li>
+                <li><Link to={`/projects/${projectId}/tasks`} className="sidebar-item">All Tasks</Link></li>
+                <li><Link to={`/projects/${projectId}/sprints`} className="sidebar-item">All Sprints</Link></li>
               </>
             )}
             <li><Link to="/teams" className="sidebar-item">Teams</Link></li>

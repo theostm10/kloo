@@ -160,7 +160,6 @@ function CreateTaskPage() {
             id="assigned_To" 
             value={assigned_to} 
             onChange={(e) => setAssignedTo(e.target.value)} 
-            required
           >
             <option value="">Select User</option>
             {users.map(user => (
@@ -176,7 +175,6 @@ function CreateTaskPage() {
             id="sprint" 
             value={sprint} 
             onChange={(e) => setSprint(e.target.value)} 
-            required
           >
             <option value="">Select Sprint</option>
             {sprints.map(sprint => (
